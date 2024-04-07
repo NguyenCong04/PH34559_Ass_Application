@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class AdapterShoe extends RecyclerView.Adapter<AdapterShoe.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 //
-//        String nameImage = list.get(position).getUrl();
+//        String nameImage = list.get(position).getImage();
 //        @SuppressLint("DiscouragedApi") int res = ((Activity)context).getResources().getIdentifier(nameImage,"drawable", context.getPackageName());
 //
 //
@@ -66,6 +67,7 @@ public class AdapterShoe extends RecyclerView.Adapter<AdapterShoe.ViewHolder> {
         holder.tvBrandShoe.setText(String.valueOf(list.get(position).getBrand()));
         holder.tvPriceShoe.setText(String.valueOf(list.get(position).getPrice()));
         holder.tvSizeShoe.setText(String.valueOf(list.get(position).getSize()));
+        Glide.with(context).load(list.get(position).getImage()).into(holder.ivShoe);
 
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +142,12 @@ public class AdapterShoe extends RecyclerView.Adapter<AdapterShoe.ViewHolder> {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("titleEdit", "Update shoe");
                 intent.putExtra("titleBtnEdit", "Update");
-                intent.putExtra("name",list.get(position).getName());
-                intent.putExtra("brand",list.get(position).getBrand());
-                intent.putExtra("price",list.get(position).getPrice());
-                intent.putExtra("size",list.get(position).getSize());
-                intent.putExtra("id",list.get(position).get_Id());
+                intent.putExtra("name", list.get(position).getName());
+                intent.putExtra("brand", list.get(position).getBrand());
+                intent.putExtra("price", list.get(position).getPrice());
+                intent.putExtra("size", list.get(position).getSize());
+                intent.putExtra("id", list.get(position).get_Id());
+                intent.putExtra("image", list.get(position).getImage());
                 context.startActivity(intent);
             }
         });

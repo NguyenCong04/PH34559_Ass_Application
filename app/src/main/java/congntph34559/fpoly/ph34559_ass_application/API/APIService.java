@@ -34,11 +34,21 @@ public interface APIService {
     @Multipart
     @POST("/api/post-shoe")
     Call<ShoeDTO> createShoe2(
-            @Part MultipartBody.Part uri
+            @Part("name") RequestBody name,
+            @Part("brand") RequestBody brand,
+            @Part("price") RequestBody price,
+            @Part("size") RequestBody size,
+            @Part MultipartBody.Part image
     );
 
+    @Multipart
     @PUT("/api/update-shoe-by-id/{id}")
-    Call<ShoeDTO> updateShoe(@Path("id") String id, @Body ShoeDTO shoe);
+    Call<ShoeDTO> updateShoe(@Path("id") String id,
+                             @Part("name") RequestBody name,
+                             @Part("brand") RequestBody brand,
+                             @Part("price") RequestBody price,
+                             @Part("size") RequestBody size,
+                             @Part MultipartBody.Part image);
 
     @DELETE("/api/delete-shoe-by-id/{id}")
     Call<ShoeDTO> deleteShoe(@Path("id") String id);

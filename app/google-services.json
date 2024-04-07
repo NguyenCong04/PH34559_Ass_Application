@@ -7,12 +7,33 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:998759207167:android:4c979cd9ef837f1a6f7cca",
+        "mobilesdk_app_id": "1:998759207167:android:3f26176321d752a86f7cca",
         "android_client_info": {
-          "package_name": "congntph34559.fpoly.ph34559_ass_application"
+          "package_name": "com.slide7"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "998759207167-abhgh1kmc9ics14k6qrsm15hu4d5kdsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.slide7",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "998759207167-j7tpavr0qpipnqqm73dorevo82s99sdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.slide7",
+            "certificate_hash": "d4a80b7d01b95ebc5a0f99fa832cdb9bb3c04cfe"
+          }
+        },
+        {
+          "client_id": "998759207167-l9jm7gtdtkvteo4i3hi7s9ib9iqmhqjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCMnk1jhePtMP1fScxs9QKZhLwkC7yddNY"
@@ -20,7 +41,49 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998759207167-2dkhf7cd617mha9uu9oiufsf2aeg0e77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998759207167:android:4c979cd9ef837f1a6f7cca",
+        "android_client_info": {
+          "package_name": "congntph34559.fpoly.ph34559_ass_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998759207167-8v94iqo1b6a0bgaq6kl90jcjhr3ej2cg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "congntph34559.fpoly.ph34559_ass_application",
+            "certificate_hash": "d4a80b7d01b95ebc5a0f99fa832cdb9bb3c04cfe"
+          }
+        },
+        {
+          "client_id": "998759207167-l9jm7gtdtkvteo4i3hi7s9ib9iqmhqjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMnk1jhePtMP1fScxs9QKZhLwkC7yddNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998759207167-2dkhf7cd617mha9uu9oiufsf2aeg0e77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

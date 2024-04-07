@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PH34559_Ass_Application</string>
+    <string name="default_web_client">kakaka\n</string>
+    <string name="default_web_client_id">kakaka\n</string>
 </resources>

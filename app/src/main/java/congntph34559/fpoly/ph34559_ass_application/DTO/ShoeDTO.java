@@ -2,22 +2,22 @@ package congntph34559.fpoly.ph34559_ass_application.DTO;
 
 public class ShoeDTO {
 
-    private  String name;
+    private String name;
     private String brand;
     private long price;
     private String size;
-    private String url;
-    private  String _id;
+    private String image;
+    private String _id;
 
     public ShoeDTO() {
     }
 
-    public ShoeDTO(String nameShoe, String brand, long price, String sizeShoe, String url) {
+    public ShoeDTO(String nameShoe, String brand, long price, String sizeShoe, String image) {
         this.name = nameShoe;
         this.brand = brand;
         this.price = price;
         this.size = sizeShoe;
-        this.url = url;
+        this.image = image;
     }
 
     public String get_Id() {
@@ -60,12 +60,12 @@ public class ShoeDTO {
         this.size = size;
     }
 
-    public String getUrl() {
-        return url;
+    public String getImage() {
+        return image;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ShoeDTO {
                 ", brand='" + brand + '\'' +
                 ", price=" + price +
                 ", size='" + size + '\'' +
-                ", url='" + url + '\'' +
+                ", image='" + image + '\'' +
                 ", id='" + _id + '\'' +
                 '}';
     }

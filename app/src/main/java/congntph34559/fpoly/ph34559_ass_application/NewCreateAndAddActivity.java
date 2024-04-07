@@ -33,6 +33,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.File;
@@ -56,7 +57,7 @@ import retrofit2.http.POST;
 public class NewCreateAndAddActivity extends AppCompatActivity {
     private static final int MY_RES_CODE = 10;
     TextView tvTitle;
-    ImageView ivBack,ivImageShoe;
+    ImageView ivBack, ivImageShoe;
     Spinner spSize;
     ArrayAdapter adapterSp;
     List<String> listSize = new ArrayList<String>();
@@ -66,34 +67,30 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
 
     Uri mUri;//DEMO
 
-    ActivityResultLauncher<Intent> activityResultLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult o) {
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult o) {
 
-                    Log.e("zzzzz", "onActivityResult: ");
+            Log.e("zzzzz", "onActivityResult: ");
 
-                    if (o.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = o.getData();
-                        if (data == null) {
-                            return;
-                        }
-                        Uri uri = data.getData();
-                        mUri = uri;
-                        try {
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                            ivImageShoe.setImageBitmap(bitmap);
-
-                        }catch (IOException e){
-                            e.printStackTrace();
-                        }
-                    }
-                    
+            if (o.getResultCode() == Activity.RESULT_OK) {
+                Intent data = o.getData();
+                if (data == null) {
+                    return;
                 }
-            });
+                Uri uri = data.getData();
+                mUri = uri;
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    ivImageShoe.setImageBitmap(bitmap);
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-
+        }
+    });
 
 
     @Override
@@ -127,8 +124,8 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
                 if (titleAdd == null) {
                     UpdateShoe();
                 } else {
-                    CreateShoe();
-//                    CreateShoe2();//DEMO
+//                    CreateShoe();
+                    CreateShoe2();//DEMO
 
                 }
 
@@ -155,9 +152,9 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             openGallery();
-        }else {
-            String [] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
-            requestPermissions(permission,MY_RES_CODE);
+        } else {
+            String[] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(permission, MY_RES_CODE);
         }
 
 
@@ -166,7 +163,7 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode  == MY_RES_CODE) {
+        if (requestCode == MY_RES_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery();
             }
@@ -179,48 +176,7 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        activityResultLauncher.launch(Intent.createChooser(intent,"Select Picture"));
-
-
-    }
-
-    private void CreateShoe() {
-
-        String name = edName.getText().toString();
-        String brand = edBrand.getText().toString();
-        String price = edPrice.getText().toString();
-        String size = (String) spSize.getSelectedItem();
-
-        if (CheckCreateShoe()) {
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(APIService.DOMAIN)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            APIService apiService = retrofit.create(APIService.class);
-
-            Call<ShoeDTO> call = apiService.createShoe(new ShoeDTO(name, brand, Long.parseLong(price), size, "url nè"));
-
-
-            call.enqueue(new Callback<ShoeDTO>() {
-                @Override
-                public void onResponse(Call<ShoeDTO> call, Response<ShoeDTO> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(NewCreateAndAddActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(NewCreateAndAddActivity.this, MainActivity.class));
-                        finish();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ShoeDTO> call, Throwable t) {
-                    Log.e("zzzzz", "onFailure: " + t.getMessage());
-                }
-            });
-
-
-        }
+        activityResultLauncher.launch(Intent.createChooser(intent, "Select Picture"));
 
 
     }
@@ -235,28 +191,26 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
 
         if (mUri != null) {
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(APIService.DOMAIN)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(APIService.DOMAIN).addConverterFactory(GsonConverterFactory.create()).build();
 
             APIService apiService = retrofit.create(APIService.class);
-//            RequestBody requestBodyName = RequestBody.create(MediaType.parse("multipart/form-data"),name);
-//            RequestBody requestBodyBrand = RequestBody.create(MediaType.parse("multipart/form-data"),brand);
-//            RequestBody requestBodyPrice = RequestBody.create(MediaType.parse("multipart/form-data"),price);
-//            RequestBody requestBodySize = RequestBody.create(MediaType.parse("multipart/form-data"),size);
 
-            String strRealPath = RealPathUtil.getRealPath(this,mUri);
-            Log.e("zzzzzzz", "CreateShoe2: "+strRealPath);
+
+            String strRealPath = RealPathUtil.getRealPath(this, mUri);
+            Log.e("xxxxxxx", "CreateShoe2: " + strRealPath);
             File file = new File(strRealPath);
 
-            RequestBody requestBodyUri = RequestBody.create(MediaType.parse("image/*"),file);
-            MultipartBody.Part mPart = MultipartBody.Part.createFormData("uri",file.getName(),requestBodyUri);
+            RequestBody reqName = RequestBody.create(MediaType.parse("multipart/form-data"), name);
+            RequestBody reqBrand = RequestBody.create(MediaType.parse("multipart/form-data"), brand);
+            RequestBody reqPrice = RequestBody.create(MediaType.parse("multipart/form-data"), price);
+            RequestBody reqSize = RequestBody.create(MediaType.parse("multipart/form-data"), size);
+            RequestBody requestBodyUri = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part mPart = MultipartBody.Part.createFormData("image", file.getName(), requestBodyUri);
 
-            Call<ShoeDTO> call = apiService.createShoe2(
-                   mPart
-            );
+            Log.e("xxxxxx", "CreateShoe2: " + mPart);
+            Log.e("xxxxxx", "CreateShoe2: " + file);
 
+            Call<ShoeDTO> call = apiService.createShoe2(reqName, reqBrand, reqPrice, reqSize, mPart);
 
             call.enqueue(new Callback<ShoeDTO>() {
                 @Override
@@ -275,10 +229,7 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
             });
 
 
-
-
         }
-
 
 
     }
@@ -298,14 +249,21 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
 
         if (CheckCreateShoe()) {
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(APIService.DOMAIN)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(APIService.DOMAIN).addConverterFactory(GsonConverterFactory.create()).build();
 
             APIService apiService = retrofit.create(APIService.class);
+            String strRealPath = RealPathUtil.getRealPath(this, mUri);
+            Log.e("xxxxxxx", "CreateShoe2: " + strRealPath);
+            File file = new File(strRealPath);
 
-            Call<ShoeDTO> call = apiService.updateShoe(id, new ShoeDTO(name, brand, Long.parseLong(price), size, "url nè"));
+            RequestBody reqName = RequestBody.create(MediaType.parse("multipart/form-data"), name);
+            RequestBody reqBrand = RequestBody.create(MediaType.parse("multipart/form-data"), brand);
+            RequestBody reqPrice = RequestBody.create(MediaType.parse("multipart/form-data"), price);
+            RequestBody reqSize = RequestBody.create(MediaType.parse("multipart/form-data"), size);
+            RequestBody requestBodyUri = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part mPart = MultipartBody.Part.createFormData("image", file.getName(), requestBodyUri);
+
+            Call<ShoeDTO> call = apiService.updateShoe(id, reqName, reqBrand, reqPrice, reqSize, mPart);
 
 
             call.enqueue(new Callback<ShoeDTO>() {
@@ -342,6 +300,7 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
         String brand = getIntent().getStringExtra("brand");
         Long price = getIntent().getLongExtra("price", 0);
         String size = getIntent().getStringExtra("size");
+        String image = getIntent().getStringExtra("image");
 
         if (titleUpdate == null) {
             tvTitle.setText(titleAdd);
@@ -359,6 +318,7 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
                 }
             }
             spSize.setSelection(viTri);
+            Glide.with(this).load(image).into(ivImageShoe);
             btnNewAndEdit.setText(titleBtnUp);
         }
 
@@ -380,8 +340,7 @@ public class NewCreateAndAddActivity extends AppCompatActivity {
         listSize.add("XL");
         listSize.add("XXL");
 
-        adapterSp =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listSize);
+        adapterSp = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listSize);
         spSize.setAdapter(adapterSp);
 
     }
