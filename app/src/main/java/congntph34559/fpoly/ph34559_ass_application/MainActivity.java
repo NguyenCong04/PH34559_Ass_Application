@@ -8,9 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Toast;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     static AdapterShoe adapterShoe;
     static RecyclerView recyclerView;
     FloatingActionButton floaAdd;
-
+    EditText edSearch;
+    TextView tvSortTang, tvSortGiam;
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -41,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.rcvList);
         floaAdd = findViewById(R.id.floatAdd);
+        edSearch = findViewById(R.id.edSearch);
+        tvSortGiam = findViewById(R.id.tvSapXepGiam);
+        tvSortTang = findViewById(R.id.tvSapXepTang);
+
 
         //Connect
         Retrofit retrofit = new Retrofit.Builder()
@@ -63,8 +73,105 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        edSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String key = edSearch.getText().toString().trim();
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(APIService.DOMAIN)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    APIService apiService = retrofit.create(APIService.class);
+
+                    apiService.searchShoe(key).enqueue(new Callback<List<ShoeDTO>>() {
+                        @Override
+                        public void onResponse(Call<List<ShoeDTO>> call, Response<List<ShoeDTO>> response) {
+                            if (response.isSuccessful()) {
+                                List<ShoeDTO> list1 = response.body();
+                                getDs(list1);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<ShoeDTO>> call, Throwable t) {
+                            Log.e("zzzzzzzzzz", "onFailure: " + t.getMessage());
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        edSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().equals("")) {
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(APIService.DOMAIN)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    //Call Api Retrofit
+                    CallAPI(retrofit);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        tvSortGiam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortShoeTang();
+            }
+        });
+        tvSortTang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortShoe();
+            }
+        });
 
     }
+
+    private void sortShoeTang() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(APIService.DOMAIN)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        APIService apiService = retrofit.create(APIService.class);
+
+
+
+        apiService.getSort().enqueue(new Callback<List<ShoeDTO>>() {
+            @Override
+            public void onResponse(Call<List<ShoeDTO>> call, Response<List<ShoeDTO>> response) {
+                Log.e("zzzzz", "onResponse: " + response.body());
+                if (response.isSuccessful()) {
+                    List<ShoeDTO> list1 = response.body();
+                    getDs(list1);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ShoeDTO>> call, Throwable t) {
+                Log.e("zzzzzzzzzz", "onFailure: " + t.getMessage());
+            }
+        });
+
+    }
+
 
     public static void CallAPI(Retrofit retrofit) {
 
@@ -79,12 +186,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<ShoeDTO>> call, @NonNull Response<List<ShoeDTO>> response) {
                 if (response.isSuccessful()) {
                     list = response.body();
-                    adapterShoe = new AdapterShoe(recyclerView.getContext(), list);
-                    LinearLayoutManager linearLayoutManager =
-                            new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setAdapter(adapterShoe);
-                    adapterShoe.notifyDataSetChanged();
+                    getDs(list);
                 }
             }
 
@@ -94,6 +196,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void sortShoe() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(APIService.DOMAIN)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        APIService apiService = retrofit.create(APIService.class);
+
+
+
+        apiService.getSortGiam().enqueue(new Callback<List<ShoeDTO>>() {
+            @Override
+            public void onResponse(Call<List<ShoeDTO>> call, Response<List<ShoeDTO>> response) {
+                Log.e("zzzzz", "onResponse: " + response.body());
+                if (response.isSuccessful()) {
+                    List<ShoeDTO> list1 = response.body();
+                    getDs(list1);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ShoeDTO>> call, Throwable t) {
+                Log.e("zzzzzzzzzz", "onFailure: " + t.getMessage());
+            }
+        });
+
+    }
+
+    private static void getDs(List<ShoeDTO> list) {
+
+        adapterShoe = new AdapterShoe(recyclerView.getContext(), list);
+        LinearLayoutManager linearLayoutManager =
+                new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapterShoe);
+        adapterShoe.notifyDataSetChanged();
 
     }
 }

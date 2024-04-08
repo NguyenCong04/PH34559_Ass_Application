@@ -14,6 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIService {
 
@@ -26,6 +27,13 @@ public interface APIService {
     @GET("/api/get-list-shoe")
     Call<List<ShoeDTO>> getShoe();
 
+    @GET("/api/search-shoe")
+    Call<List<ShoeDTO>> searchShoe(@Query("key") String key);
+
+    @GET("/api/sort-shoe")
+    Call<List<ShoeDTO>> getSort();
+    @GET("/api/sort-shoe-1")
+    Call<List<ShoeDTO>> getSortGiam();
 
     @POST("/api/post-shoe")
     Call<ShoeDTO> createShoe(@Body ShoeDTO shoe);
